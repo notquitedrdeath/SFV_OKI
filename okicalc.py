@@ -1,26 +1,35 @@
 import urllib.request
 import json
 import os
-import pprint
+from json import JSONDecodeError
 
 JSON_URL = "https://raw.githubusercontent.com/D4RKONION/fatsfvframedatajson/master/sfv.json"
 
-class Character(object):
-    def __init__(self, name):
-        self.name = name
-        self.knockdowns = {}
 
-    def add_kd(self, move_name, kd, kdr, kdrb):
-        # Warning! This will overwrite any existing move.
-        self.knockdowns[move_name] = {'kd': kd, 'kdr': kdr, 'kdrb': kdrb}
-
-    def __str__(self):
-        return str(self.name)
-
-    def __repr__(self):
-        return str(self)
+def load_file(location):
+    if not os.path.exists(location):
+        print("Couldn't find data file, assuming there is none.")
+    else:
+        try:
+            with open(location, 'r') as data_file:
+                return json.loads(data_file.read())
+        except JSONDecodeError:
+            print("Failed to read Data File")
+    return None
 
 
+def download_json(url=JSON_URL):
+    try:
+        with urllib.request.urlopen(JSON_URL) as data_url:
+            return json.loads(data_url)
+    except JSONDecodeError:
+        print("Failed to read JSON data from URL")
+    return None
+
+
+def load_data(file_location=None, url=None):
+    if url:
+        json_blob = download_json(url)
 
 def load_data(location):
     char_list = []
@@ -29,7 +38,6 @@ def load_data(location):
         with urllib.request.urlopen(JSON_URL) as sfvdata:
             json_blob = json.loads(sfvdata.read().decode())
             for char in json_blob.keys():
-                c = Character(char)
                 move_list = json_blob[char]['moves']
                 for section in move_list:
                     for move in move_list[section]:
@@ -59,17 +67,6 @@ def select_char():
             return sel
         except (ValueError, IndexError):
             print("Please select a valid character")
-
-def find_kd_moves(move_list):
-    for section, moves in move_list.items():
-        print("Searching for moves from {}".format(section))
-        for move in moves:
-            s = int(moves[move]['startup'])
-            a = int(moves[move]['active'])
-            r = int(moves[move]['recovery'])
-            print("\t- {}".format(move))
-            print("\t\t- {}:{}:{} - Total {}".format(s,a,r,s+a+r-1))
-
 
 
 if __name__ == '__main__':
