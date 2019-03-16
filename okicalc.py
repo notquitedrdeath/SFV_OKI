@@ -1,93 +1,79 @@
-import urllib.request
 import json
 import os
 from json import JSONDecodeError
 
-JSON_URL = "https://raw.githubusercontent.com/D4RKONION/fatsfvframedatajson/master/sfv.json"
 
+def save_data(char_list, location):
+    with open(location, 'w') as sfv_file:
+        sfv_file.write(json.dumps(char_list))
 
-def load_file(location):
-    if not os.path.exists(location):
-        print("Couldn't find data file, assuming there is none.")
-    else:
-        try:
-            with open(location, 'r') as data_file:
-                return json.loads(data_file.read())
-        except JSONDecodeError:
-            print("Failed to read Data File")
-    return None
-
-
-def download_json(url=JSON_URL):
-    try:
-        with urllib.request.urlopen(JSON_URL) as data_url:
-            return json.loads(data_url)
-    except JSONDecodeError:
-        print("Failed to read JSON data from URL")
-    return None
-
-
-def load_data(file_location=None, url=None):
-    if url:
-        json_blob = download_json(url)
 
 def load_data(location):
-    char_list = []
+    char_list = {}
     if not os.path.exists(location):
-        print("Couldn't find data file, downloading and saving now...")
-        with urllib.request.urlopen(JSON_URL) as sfvdata:
-            json_blob = json.loads(sfvdata.read().decode())
-            for char in json_blob.keys():
-                move_list = json_blob[char]['moves']
-                for section in move_list:
-                    for move in move_list[section]:
-                        if 'kd' in move_list[section][move]:
-                            name = move
-                            kd = move_list[section][move]['kd']
-                            kdr = move_list[section][move]['kdr']
-                            kdrb = move_list[section][move]['kdrb']
-                            if section != 'normal':
-                                name += ' - {}'.format(section)
-                            c.add_kd(name, kd, kdr, kdrb)
-                char_list.append(c)
+        print("Couldn't find data file, starting from scratch...")
+    else:
+        try:
+            with open(location, 'r') as sfv_file:
+                char_list = json.loads(sfv_file.read())
+            print("Loaded the following characters: {}".format(",".join(char_list.keys())))
+        except JSONDecodeError:
+            print("Couldn't load data file, starting from scratch...")
     return char_list
 
 
-def select_char():
-    print("Select a character from the following:")
-    for i, char in enumerate(data.keys()):
-        print("{}: {}".format(i+1, char))
+def new_character(char_list):
+    print("Adding a new character...")
+    char_name = input("Name: ")
+    char_list[char_name] = {'knockdowns': [], 'moves': []}
+    return char_name
 
-    while 1:
-        selection = input(">")
-        if selection in data.keys():
-            return selection
-        try:
-            sel = list(data.keys())[int(selection)-1]
-            return sel
-        except (ValueError, IndexError):
-            print("Please select a valid character")
+
+def select_char(char_list, char_name):
+    char_info = None
+    if char_name:
+        char_info = char_list.get(char_name, None)
+        if char_info:
+            return char_info
+        print("Couldn't find selected character: {}".format(char_name))
+    while not char_info:
+        print("Please select (Name or Index) from the provided list (Type 'Quit' to quit):")
+        characters = list(char_list.keys())
+        characters.append('Add New Character')
+        for i, char in enumerate(characters):
+            print("{}: {}".format(i+1, char))
+        selection = input("> ")
+        if selection.lower() == 'quit':
+            return -1
+        char_info = char_list.get(selection, None)
+        if not char_info:
+            try:
+                sel = characters[int(selection)-1]
+                if sel == 'Add New Character':
+                    sel = new_character(char_list)
+                char_info = char_list.get(sel, None)
+            except (ValueError, IndexError):
+                print("Please enter either a character name or index")
+    print("Found: {}".format(char_info))
+    return char_info
+
+def select_knockdown
 
 
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser(description="Oki calculator based off FAT SFV data")
-    parser.add_argument('-c', type=str, dest='character', help='Name of the character')
+    parser.add_argument('-c', type=str, dest='character', default=None, help='Name of the character')
     parser.add_argument('-d', type=str, dest='datafile', default='sfv_kd_data.json',
                         help='Data File location. Defaults to .\\sfv_kd_data.json')
-    parser.add_argument('-u', action='store_true', dest='update', help='Attempt to update KDA data from FAT JSON file')
     args = parser.parse_args()
 
     char_list = load_data(args.datafile)
-    for char in char_list:
-        print(char)
-        for move in char.knockdowns:
-            print("\t- {} - {}/{}/{}".format(move, char.knockdowns[move]['kd'], char.knockdowns[move]['kdr'], char.knockdowns[move]['kdrb']))
+    while 1:
+        character = select_char(char_list, args.character)
+        if character == -1:
+            break
+        while 1:
+            knockdown = select_knockdown(character)
 
-    # character = args.character or select_char()
-    # try:
-    #     character_data = data[character]
-    # except KeyError:
-    #     print("Unknown character given")
-    #
-    # find_kd_moves(character_data['moves'])
+    save_data(char_list, args.datafile)
