@@ -1,0 +1,28 @@
+{
+    "name": "Juri",
+    "health": 950,
+    "stun": 950,
+    "walkspeed_forward": 5,
+    "walkspeed_back": 3.3,
+    "dash_forward": 16,
+    "dash_back": 24,
+    "jump_forward_speed": [
+        3,
+        38,
+        4
+    ],
+    "jump_neutral_speed": [
+        4,
+        38,
+        4
+    ],
+    "jump_back_speed": [
+        4,
+        38,
+        4
+    ],
+    "jump_forward_distance": 209,
+    "jump_back_distance": 182.4,
+    "movelist": [],
+    "knockdowns": []
+}
