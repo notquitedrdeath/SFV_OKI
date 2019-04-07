@@ -2,16 +2,14 @@ import json
 import os
 from json import JSONDecodeError
 
-
-def save_data(char_list, location):
-    with open(location, 'w') as sfv_file:
-        sfv_file.write(json.dumps(char_list))
-
+def load_characters(location='./characters'):
+    for file in [file for file in os.listdir(location) if file.endswith('.json')]:
+        print("Loading... {}".format(file.replace('.json', '')))
 
 def load_data(location):
     char_list = {}
     if not os.path.exists(location):
-        print("Couldn't find data file, starting from scratch...")
+         print("Couldn't find data file, starting from scratch...")
     else:
         try:
             with open(location, 'r') as sfv_file:
@@ -20,6 +18,26 @@ def load_data(location):
         except JSONDecodeError:
             print("Couldn't load data file, starting from scratch...")
     return char_list
+
+def make_selection(item_list):
+    print("Available Options:")
+    items = list(item_list)
+    items.append('Add New Option')
+    for i, item in enumerate(item_list):
+        print("- {}: {}".format(i, item))
+    while 1:
+        selection = input("> ")
+        if selection == '':
+            return -1
+        if selection.lower() == 'quit':
+            return -2
+        if selection in item_list:
+            return selection
+        try:
+            sel = int(selection) - 1
+            return items[sel]
+        except (ValueError, IndexError):
+            print("Not a valid option")
 
 
 def new_character(char_list):
@@ -37,7 +55,7 @@ def select_char(char_list, char_name):
             return char_info
         print("Couldn't find selected character: {}".format(char_name))
     while not char_info:
-        print("Please select (Name or Index) from the provided list (Type 'Quit' to quit):")
+        print("Please select from the provided list (Type 'Quit' to quit):")
         characters = list(char_list.keys())
         characters.append('Add New Character')
         for i, char in enumerate(characters):
@@ -57,7 +75,15 @@ def select_char(char_list, char_name):
     print("Found: {}".format(char_info))
     return char_info
 
-def select_knockdown
+def select_knockdown(char_info):
+    knockdowns = list(char_info['knockdowns'])
+    knockdowns.append('Add New Knockdown')
+    print("Select a knockdown (No entry returns to character select)")
+    for i, knockdown in enumerate(knockdowns):
+        print(knockdown)
+    selection = input("> ")
+    if selection == '':
+    
 
 
 if __name__ == '__main__':

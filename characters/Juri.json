@@ -23,6 +23,45 @@
     ],
     "jump_forward_distance": 209,
     "jump_back_distance": 182.4,
-    "movelist": [],
-    "knockdowns": []
+    "movelist": [
+        {
+            "name": "s.MK",
+            "input": "s.MK",
+            "startup": 5,
+            "active": [
+                [
+                    0,
+                    1
+                ],
+                [
+                    1,
+                    3
+                ]
+            ],
+            "recovery": 15,
+            "total_frames": 24,
+            "on_block": 2,
+            "on_hit": 4,
+            "on_ch": 6,
+            "damage": 30,
+            "stun": 70,
+            "cancels": null,
+            "max_range": 0.6,
+            "pushback_block": 0.5,
+            "pushback_hit": 0.4,
+            "pushback_ch": null,
+            "can_cc": false,
+            "comments": null
+        }
+    ],
+    "knockdowns": [
+        {
+            "name": "EX.Fuha",
+            "advantage_norise": 80,
+            "advantage_quirckrise": 21,
+            "advantage_backrise": 26,
+            "distance_quickrise": 0.7,
+            "distance_backrise": 1.7
+        }
+    ]
 }

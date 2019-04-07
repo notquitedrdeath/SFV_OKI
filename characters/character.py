@@ -8,12 +8,12 @@ class JSONSerialisableObject(object):
     def __init__(self, *args, **kwargs):
         pass
 
+    def to_dict(self):
+        return {item: self.__dict__[item] for item in self.__dict__ if not item.startswith('__') and not callable(item)}
+
     def serialise(self):
-        json_dict = {}
-        for item in self.__dict__:
-            if not item.startswith('__') and not callable(item):
-                json_dict[item] = self.__dict__[item]
-        return json.dumps(json_dict, indent=4, default=str)
+        json_dict = self.to_dict()
+        return json.dumps(json_dict, indent=4, default=lambda o: o.to_dict())
 
     def __str__(self):
         return self.serialise()
@@ -63,6 +63,10 @@ class Character(JSONSerialisableObject):
     def add_move(self, move):
         self.movelist.append(move)
 
+    def add_kd(self, kd):
+        self.knockdowns.append(kd)
+
+
 class Move(JSONSerialisableObject):
     def __init__(self, name, input="s.LP",
                  startup=3, active=2, recovery=7,
@@ -107,5 +111,15 @@ class Move(JSONSerialisableObject):
         move_str += self.recovery * "r"
         return move_str
 
-    def __str__(self):
-        return self.serialise()
+
+class Knockdown(JSONSerialisableObject):
+    def __init__(self, name, advantage_norise=0, advantage_quickrise=0, advantage_backrise=None,
+                 distance_quickrise=None, distance_backrise=None, comments=None, *args, **kwargs):
+        super(self.__class__, self).__init__(*args, **kwargs)
+        self.name = name
+        self.advantage_norise = advantage_norise
+        self.advantage_quirckrise = advantage_quickrise
+        self.advantage_backrise = advantage_backrise or advantage_quickrise + 5
+        self.distance_quickrise = distance_quickrise
+        self.distance_backrise = distance_backrise
+        self.comments = comments
