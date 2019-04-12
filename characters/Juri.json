@@ -25,21 +25,17 @@
     "jump_back_distance": 182.4,
     "movelist": [
         {
-            "name": "s.MK",
-            "input": "s.MK",
-            "startup": 5,
+            "name": "Standing Light Punch",
+            "input": "s.LP",
+            "startup": 3,
             "active": [
                 [
                     0,
-                    1
-                ],
-                [
-                    1,
-                    3
+                    2
                 ]
             ],
-            "recovery": 15,
-            "total_frames": 24,
+            "recovery": 7,
+            "total_frames": 11,
             "on_block": 2,
             "on_hit": 4,
             "on_ch": 6,
@@ -52,13 +48,88 @@
             "pushback_ch": null,
             "can_cc": false,
             "comments": null
+        },
+        {
+            "name": "Standing Light Kick",
+            "input": "s.LK",
+            "startup": 4,
+            "active": [
+                [
+                    0,
+                    4
+                ]
+            ],
+            "recovery": 8,
+            "total_frames": 15,
+            "on_block": 1,
+            "on_hit": 4,
+            "on_ch": 6,
+            "damage": 30,
+            "stun": 70,
+            "cancels": null,
+            "max_range": 0.7,
+            "pushback_block": 0.5,
+            "pushback_hit": 0.45,
+            "pushback_ch": null,
+            "can_cc": false,
+            "comments": null
+        },
+        {
+            "name": "Crouching Light Punch",
+            "input": "c.LP",
+            "startup": 4,
+            "active": [
+                [
+                    0,
+                    3
+                ]
+            ],
+            "recovery": 6,
+            "total_frames": 12,
+            "on_block": 2,
+            "on_hit": 4,
+            "on_ch": 6,
+            "damage": 30,
+            "stun": 70,
+            "cancels": null,
+            "max_range": 0.62,
+            "pushback_block": 0.4,
+            "pushback_hit": 0.4,
+            "pushback_ch": null,
+            "can_cc": false,
+            "comments": null
+        },
+        {
+            "name": "Crouching Light Kick",
+            "input": "c.LK",
+            "startup": 3,
+            "active": [
+                [
+                    0,
+                    2
+                ]
+            ],
+            "recovery": 10,
+            "total_frames": 14,
+            "on_block": 0,
+            "on_hit": 2,
+            "on_ch": 4,
+            "damage": 20,
+            "stun": 70,
+            "cancels": null,
+            "max_range": 0.61,
+            "pushback_block": 0.45,
+            "pushback_hit": 0.49,
+            "pushback_ch": null,
+            "can_cc": false,
+            "comments": null
         }
     ],
     "knockdowns": [
         {
             "name": "EX.Fuha",
             "advantage_norise": 80,
-            "advantage_quirckrise": 21,
+            "advantage_quickrise": 21,
             "advantage_backrise": 26,
             "distance_quickrise": 0.7,
             "distance_backrise": 1.7

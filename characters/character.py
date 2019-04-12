@@ -68,7 +68,7 @@ class Character(JSONSerialisableObject):
 
 
 class Move(JSONSerialisableObject):
-    def __init__(self, name, input="s.LP",
+    def __init__(self, name, input="s.LP", hits='Mid',
                  startup=3, active=2, recovery=7,
                  on_block=2, on_hit=4, on_ch=None,
                  max_range=0.6, pushback_block=0.5, pushback_hit=0.4, pushback_ch=None, can_cc=False,
@@ -77,6 +77,7 @@ class Move(JSONSerialisableObject):
         self.name = name
         self.input = input
         self.startup = startup
+        self.hits = hits
         if isinstance(active, int):
             # Active can either be single value for single hit buttons (s.LP = 2 active frames)
             self.active = [(0, active)]
@@ -118,7 +119,7 @@ class Knockdown(JSONSerialisableObject):
         super(self.__class__, self).__init__(*args, **kwargs)
         self.name = name
         self.advantage_norise = advantage_norise
-        self.advantage_quirckrise = advantage_quickrise
+        self.advantage_quickrise = advantage_quickrise
         self.advantage_backrise = advantage_backrise or advantage_quickrise + 5
         self.distance_quickrise = distance_quickrise
         self.distance_backrise = distance_backrise
