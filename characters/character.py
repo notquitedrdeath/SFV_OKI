@@ -45,8 +45,14 @@ class Character(JSONSerialisableObject):
         self.jump_back_speed = jump_back_speed
         self.jump_forward_distance = jump_forward_distance
         self.jump_back_distance = jump_back_distance
-        self.movelist = movelist or []
-        self.knockdowns = knockdowns or []
+        if movelist:
+            self.movelist = [Move(**move) for move in movelist]
+        else:
+            self.movelist = []
+        if knockdowns:
+            self.knockdowns = [Knockdown(**kd) for kd in knockdowns]
+        else:
+            self.knockdowns = []
 
     def save(self, location=None):
         location = location or os.path.join(CHAR_DIRECTORY, "{}.json".format(self.name))
