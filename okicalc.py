@@ -41,23 +41,25 @@ def select_char(char_list, char_name):
 
 def select_knockdown(kd_list, kd=None):
     knockdown = None
+    kd_dict = {kd.name: kd for kd in kd_list}
     if kd:
-        knockdown = kd_list.get(kd, None)
+        knockdown = kd_dict.get(kd, None)
         if not knockdown:
             print("Couldn't find selected knockdown")
     while not knockdown:
         print("Select a Knockdown from the list (Type 'return' to return to Character Select)")
-        kds = list(kd_list.keys())
+        print(kd_dict)
+        kds = list(kd_dict.keys())
         for i, k in enumerate(kds):
             print("{}: {}".format(i+1, k))
         selection = input("> ")
         if selection.lower() == 'return':
             return -1
-        knockdown = kd_list.get(selection, None)
+        knockdown = kd_dict.get(selection, None)
         if not knockdown:
             try:
                 sel = kds[int(selection)-1]
-                knockdown = kd_list.get(sel, None)
+                knockdown = kd_dict.get(sel, None)
             except (ValueError, IndexError):
                 print("Please enter either a character name or index")
     print("Found: {}".format(knockdown))
@@ -72,7 +74,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     char_list = load_characters(args.char_dir)
-    print(char_list)
     while 1:
         character = select_char(char_list, args.character)
         if character == -1:
@@ -81,4 +82,5 @@ if __name__ == '__main__':
             knockdown = select_knockdown(character.knockdowns)
             if knockdown == -1:
                 break
-
+            print("Looking at {}".format(knockdown))
+            print("."*knockdown.advantage_norise)
